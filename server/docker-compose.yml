@@ -13,33 +13,34 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - fullstack
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: live@admin.com
-      PGADMIN_DEFAULT_PASSWORD: password
-    depends_on:
-      - db
-    links:
-      - db
-    ports:
-      - "5050:80"
-    networks:
-      - fullstack
-    restart: unless-stopped
+# pgadmin:
+#   image: dpage/pgadmin4
+#   container_name: pgadmin
+#   environment:
+#     PGADMIN_DEFAULT_EMAIL: live@admin.com
+#     PGADMIN_DEFAULT_PASSWORD: password
+#   depends_on:
+#     - db
+#   links:
+#     - db
+#   ports:
+#     - 5050:80
+#   networks:
+#     - fullstack
+#   restart: unless-stopped
   app:
     build: .
     container_name: app
-    command: ["./wait-for-it.sh", "db:5432", "--", "go", "run", "main.go"]
+    #command: ["./wait-for-it.sh", "db:5432", "--", "go", "run", "main.go"]
+    command: ["go", "run", "main.go"]
     volumes:
       - ./src:/go/src/app
     ports:
-      - "8080:8080"
+      - 4000:4000
     depends_on:
-      - db
+     - db
     links:
-      - db
+     - db
     networks:
       - fullstack
 networks:
