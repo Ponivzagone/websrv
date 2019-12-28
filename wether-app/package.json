@@ -7,7 +7,13 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
-    "weather-icons": "git+https://github.com/erikflowers/weather-icons.git"
+    "react-router": "latest",
+    "weather-icons": "git+https://github.com/erikflowers/weather-icons.git",
+    "history": "latest",
+    "jquery": "^3.4.1",
+    "path-to-regexp": "^1.7.0",
+    "popper.js": "^1.16.0",
+    "toastr": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

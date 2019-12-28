@@ -4,6 +4,11 @@ import "./form.style.css";
 const Form = props => {
   return (
     <div className="container h-100">
+      <div className="row">
+          <div className="col-md-12">
+              <h3>Enter City and Country</h3>
+          </div>
+      </div>
       <form onSubmit={props.loadweather}>
         <div>{props.error ? error(props) : ""}</div>
         <div className="row">

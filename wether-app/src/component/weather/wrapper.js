@@ -1,14 +1,14 @@
 import React from "react";
-import "./App.css";
-import Form from "./component/form.component";
-import Weather from "./component/weather.component";
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import "weather-icons/css/weather-icons.css";
+
+import Form from "./form.component";
+import Weather from "./weather.component";
+import {fetchCurrentWeather} from "../../api/request";
+
 
 const Api_Key = "429736441cf3572838aa10530929f7cd";
 
-class App extends React.Component {
+class Wrapper extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -75,13 +75,18 @@ class App extends React.Component {
     const city = e.target.elements.city.value;
 
     if (country && city) {
-      const api_call = await fetch(
-        `http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${Api_Key}`
-      );
+        try {
+            const token = await fetchCurrentWeather({country: country, city: city}, this.state.token);
+
+            this.props.onAuthenticated(token);
+            this.props.history.push("/");
+        } catch (e) {
+            console.log(e);
+        }
 
       const response = await api_call.json();
 
-      if(response.cod != "200") {
+      if(response.cod !== "200") {
         this.setState({
           city: undefined,
           country: undefined,
@@ -128,21 +133,25 @@ class App extends React.Component {
   };
 
   render() {
+    if (this.props.token) {
+    return (<div>
+            <Form loadweather={this.getWeather} error={this.state.error} error_msg={this.state.error_msg} />
+            <Weather
+              cityname={this.state.city}
+              weatherIcon={this.state.icon}
+              temp_celsius={this.state.celsius}
+              temp_max={this.state.temp_max}
+              temp_min={this.state.temp_min}
+              description={this.state.description}
+            />   
+            </div>     
+    );
+    } 
     return (
-      <div className="App">
-        <Form loadweather={this.getWeather} error={this.state.error} error_msg={this.state.error_msg} />
-        <Weather
-          cityname={this.state.city}
-          weatherIcon={this.state.icon}
-          temp_celsius={this.state.celsius}
-          temp_max={this.state.temp_max}
-          temp_min={this.state.temp_min}
-          description={this.state.description}
-        />
-      </div>
+        <Redirect to="/login" />
     );
   }
 }
 
-export default App;
+export default Wrapper;
 
